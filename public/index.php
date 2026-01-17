@@ -1,23 +1,34 @@
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Module de connexion - Accueil</title>
-    </head>
+<?php
+// Je démarre la session
+session_start();
 
-    <body>
-        <header>
-            <h1>Hello world !</h1>
-        </header>
+// Je récupère la page demandée via l'URL
+$page = $_GET['page'] ?? 'home';
 
-        <main>
+// Je définis les pages autorisées
+$allowedPages = ['home', 'login', 'register', 'profile', 'admin', 'logout'];
 
-        </main>
+// Je vérifie si la page demandée existe
+if (!in_array($page, $allowedPages)) {
+    $page = 'home';
+}
 
-        <footer>
+// Je définis les titres des pages
+$pageTitles = [
+    'home' => 'Accueil',
+    'login' => 'Connexion',
+    'register' => 'Inscription',
+    'profile' => 'Mon Profil',
+    'admin' => 'Administration'
+];
+$pageTitle = $pageTitles[$page] ?? 'Auth Module';
 
-        </footer>
-        
-    </body>
-</html>
+// J'inclus le header
+include '../assets/components/header.php';
+
+// J'inclus la vue demandée
+include '../assets/views/' . $page . '.php';
+
+// J'inclus le footer
+include '../assets/components/footer.php';
+?>
