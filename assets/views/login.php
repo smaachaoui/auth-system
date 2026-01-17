@@ -10,6 +10,9 @@
         
         <!-- Je crée le formulaire de connexion -->
         <form action="index.php?page=login" method="POST">
+            <!-- Token CSRF -->
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
+            
             <!-- Champ email -->
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>

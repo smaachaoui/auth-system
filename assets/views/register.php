@@ -15,6 +15,9 @@
         
         <!-- Je crée le formulaire d'inscription -->
         <form action="index.php?page=register" method="POST">
+            <!-- Token CSRF -->
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
+            
             <!-- Champ nom d'utilisateur -->
             <div class="mb-3">
                 <label for="username" class="form-label">Nom d'utilisateur</label>
