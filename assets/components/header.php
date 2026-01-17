@@ -24,7 +24,7 @@
         <div class="container">
             <!-- Je crée le logo cliquable -->
             <a class="navbar-brand" href="index.php">
-                <img src="./img/mandalorian_helmet.png" alt="un logo qui représente un mandalorian issu de l'univers Star Wars">
+                <img src="../assets/img/mandalorian_helmet.png" alt="un logo qui représente un mandalorian issu de l'univers Star Wars" class="navbar-logo">
             </a>
             
             <!-- Je crée le bouton burger pour mobile -->
