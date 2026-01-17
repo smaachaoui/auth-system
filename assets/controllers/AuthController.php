@@ -32,6 +32,12 @@ class AuthController
             return ['success' => false, 'error' => null];
         }
 
+        // Je vérifie le token CSRF
+        $csrfToken = $_POST['csrf_token'] ?? '';
+        if (!$this->verifyCsrfToken($csrfToken)) {
+            return ['success' => false, 'error' => 'Session expirée, veuillez réessayer.'];
+        }
+
         // Je récupère et nettoie les données du formulaire
         $username = trim($_POST['username'] ?? '');
         $email = trim($_POST['email'] ?? '');
@@ -119,6 +125,12 @@ class AuthController
             return ['success' => false, 'error' => null];
         }
 
+        // Je vérifie le token CSRF
+        $csrfToken = $_POST['csrf_token'] ?? '';
+        if (!$this->verifyCsrfToken($csrfToken)) {
+            return ['success' => false, 'error' => 'Session expirée, veuillez réessayer.'];
+        }
+
         // Je récupère et nettoie les données du formulaire
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
@@ -194,6 +206,39 @@ class AuthController
 
         // Je détruis la session
         session_destroy();
+    }
+
+    /**
+     * Je génère un token CSRF
+     *
+     * @return string
+     */
+    public function generateCsrfToken(): string
+    {
+        // Je génère un token aléatoire
+        $token = bin2hex(random_bytes(32));
+        
+        // Je stocke le token en session
+        $_SESSION['csrf_token'] = $token;
+        
+        return $token;
+    }
+
+    /**
+     * Je vérifie le token CSRF
+     *
+     * @param string $token Token à vérifier
+     * 
+     * @return bool
+     */
+    public function verifyCsrfToken(string $token): bool
+    {
+        // Je vérifie que le token existe en session et correspond
+        if (!isset($_SESSION['csrf_token'])) {
+            return false;
+        }
+        
+        return hash_equals($_SESSION['csrf_token'], $token);
     }
 
     /**
