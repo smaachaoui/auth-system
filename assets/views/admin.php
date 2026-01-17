@@ -1,16 +1,11 @@
 <!-- Vue Administration -->
 <?php
-// Je redirige si l'utilisateur n'est pas connecté
-if (!isset($_SESSION['user'])) {
-    header('Location: index.php?page=login');
-    exit;
-}
-
-// Je redirige si l'utilisateur n'est pas admin
-if ($_SESSION['user']['role'] !== 'admin') {
-    header('Location: index.php?page=profile');
-    exit;
-}
+// Je récupère les statistiques via le modèle User
+$userModel = new User();
+$totalUsers = $userModel->countAll();
+$totalAdmins = $userModel->countAdmins();
+$newUsers = $userModel->countNewUsers();
+$users = $userModel->findAll();
 ?>
 
 <div class="row">
@@ -23,7 +18,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
             <div class="col-md-4">
                 <div class="card bg-dark text-white">
                     <div class="card-body text-center">
-                        <h3 id="totalUsers">0</h3>
+                        <h3><?= $totalUsers ?></h3>
                         <p class="mb-0">Utilisateurs</p>
                     </div>
                 </div>
@@ -33,7 +28,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
             <div class="col-md-4">
                 <div class="card bg-dark text-white">
                     <div class="card-body text-center">
-                        <h3 id="totalAdmins">0</h3>
+                        <h3><?= $totalAdmins ?></h3>
                         <p class="mb-0">Administrateurs</p>
                     </div>
                 </div>
@@ -43,7 +38,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
             <div class="col-md-4">
                 <div class="card bg-dark text-white">
                     <div class="card-body text-center">
-                        <h3 id="newUsers">0</h3>
+                        <h3><?= $newUsers ?></h3>
                         <p class="mb-0">Nouveaux (7j)</p>
                     </div>
                 </div>
@@ -64,14 +59,33 @@ if ($_SESSION['user']['role'] !== 'admin') {
                                 <th>Nom d'utilisateur</th>
                                 <th>Email</th>
                                 <th>Rôle</th>
-                                <th>Actions</th>
+                                <th>Date d'inscription</th>
                             </tr>
                         </thead>
-                        <tbody id="usersTableBody">
-                            <!-- Les utilisateurs seront chargés ici -->
-                            <tr>
-                                <td colspan="5" class="text-center">Chargement...</td>
-                            </tr>
+                        <tbody>
+                            <?php if (empty($users)): ?>
+                                <!-- Aucun utilisateur trouvé -->
+                                <tr>
+                                    <td colspan="5" class="text-center">Aucun utilisateur trouvé.</td>
+                                </tr>
+                            <?php else: ?>
+                                <!-- J'affiche chaque utilisateur -->
+                                <?php foreach ($users as $user): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($user['id']) ?></td>
+                                        <td><?= htmlspecialchars($user['username']) ?></td>
+                                        <td><?= htmlspecialchars($user['email']) ?></td>
+                                        <td>
+                                            <?php if ($user['role'] === 'admin'): ?>
+                                                <span class="badge bg-danger">Admin</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-secondary">User</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?= date('d/m/Y H:i', strtotime($user['created_at'])) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
