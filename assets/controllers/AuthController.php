@@ -159,6 +159,84 @@ class AuthController
         return ['success' => true, 'message' => 'Connexion réussie !'];
     }
 
+        /**
+     * Je gère la mise à jour du profil utilisateur (username et email)
+     *
+     * @return array Tableau contenant le statut et le message
+     */
+    public function updateProfile(): array
+    {
+        // Je vérifie que l'utilisateur est connecté
+        if (!$this->isLoggedIn()) {
+            return ['success' => false, 'error' => 'Vous devez être connecté pour modifier votre profil.'];
+        }
+
+        // Je vérifie que la requête est en POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return ['success' => false, 'error' => null];
+        }
+
+        // Je vérifie le token CSRF
+        $csrfToken = $_POST['csrf_token'] ?? '';
+        if (!$this->verifyCsrfToken($csrfToken)) {
+            return ['success' => false, 'error' => 'Session expirée, veuillez réessayer.'];
+        }
+
+        // Je récupère et nettoie les données du formulaire
+        $username = trim($_POST['username'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+
+        // Je vérifie que les champs sont remplis
+        if (empty($username) || empty($email)) {
+            return ['success' => false, 'error' => 'Tous les champs sont obligatoires.'];
+        }
+
+        // Je vérifie la longueur du nom d'utilisateur
+        if (strlen($username) < 3 || strlen($username) > 50) {
+            return ['success' => false, 'error' => 'Le nom d\'utilisateur doit contenir entre 3 et 50 caractères.'];
+        }
+
+        // Je vérifie le format du nom d'utilisateur
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+            return ['success' => false, 'error' => 'Le nom d\'utilisateur ne peut contenir que des lettres, chiffres et underscores.'];
+        }
+
+        // Je vérifie le format de l'email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return ['success' => false, 'error' => 'L\'email n\'est pas valide.'];
+        }
+
+        // Je récupère l'utilisateur connecté
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser === null) {
+            return ['success' => false, 'error' => 'Utilisateur introuvable.'];
+        }
+
+        $userId = (int) $currentUser['id'];
+
+        // Je vérifie si l'email est déjà utilisé par un autre utilisateur
+        if ($this->userModel->emailExistsExceptId($email, $userId)) {
+            return ['success' => false, 'error' => 'Cet email est déjà utilisé.'];
+        }
+
+        // Je vérifie si le nom d'utilisateur est déjà utilisé par un autre utilisateur
+        if ($this->userModel->usernameExistsExceptId($username, $userId)) {
+            return ['success' => false, 'error' => 'Ce nom d\'utilisateur est déjà utilisé.'];
+        }
+
+        // Je mets à jour le profil en base
+        if (!$this->userModel->updateProfile($userId, $username, $email)) {
+            return ['success' => false, 'error' => 'Une erreur est survenue lors de la mise à jour du profil.'];
+        }
+
+        // Je mets à jour la session pour refléter les changements immédiatement
+        $_SESSION['user']['username'] = $username;
+        $_SESSION['user']['email'] = $email;
+
+        return ['success' => true, 'message' => 'Profil mis à jour avec succès !'];
+    }
+
+
     /**
      * Je crée la session utilisateur
      *
@@ -260,6 +338,19 @@ class AuthController
     {
         return $this->isLoggedIn() && $_SESSION['user']['role'] === 'admin';
     }
+
+    /**
+     * Je récupère le modèle User
+     *
+     * Je l'utilise notamment pour les fonctionnalités d'administration (dashboard, liste des utilisateurs, etc.)
+     *
+     * @return User Instance du modèle User
+     */
+    public function getUserModel(): User
+    {
+        return $this->userModel;
+    }
+
 
     /**
      * Je récupère l'utilisateur connecté

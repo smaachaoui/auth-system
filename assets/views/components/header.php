@@ -24,7 +24,7 @@
         <div class="container">
             <!-- Je crée le logo cliquable -->
             <a class="navbar-brand" href="index.php">
-                <img src="img/mandalorian_helmet.png" alt="un logo qui représente un mandalorian issu de l'univers Star Wars" class="navbar-logo">
+                <img src="img/logo.png" alt="un logo qui représente un mandalorian issu de l'univers Star Wars" class="navbar-logo">
             </a>
             
             <!-- Je crée le bouton burger pour mobile -->
@@ -33,32 +33,33 @@
             </button>
             
             <!-- Je crée le menu de navigation -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav ms-auto text-end">
                     <li class="nav-item">
                         <a class="nav-link" href="index.php">Accueil</a>
                     </li>
-                    
-                    <!-- J'affiche les liens selon l'état de connexion -->
+
                     <?php if (isset($_SESSION['user'])): ?>
-                        <!-- Je suis connecté -->
                         <li class="nav-item">
                             <a class="nav-link" href="index.php?page=profile">Profil</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="index.php?page=logout">Déconnexion</a>
                         </li>
+
                     <?php else: ?>
-                        <!-- Je ne suis pas connecté -->
                         <li class="nav-item">
                             <a class="nav-link" href="index.php?page=login">Connexion</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="index.php?page=register">Inscription</a>
                         </li>
                     <?php endif; ?>
                 </ul>
             </div>
+
         </div>
     </nav>
 </header>

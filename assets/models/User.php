@@ -159,6 +159,101 @@ class User
         }
     }
 
+        /**
+        * Je vérifie si un email existe déjà en base pour un autre utilisateur
+     *
+     * @param string $email     Email à vérifier
+     * @param int    $excludeId ID de l'utilisateur à exclure
+     *
+     * @return bool
+     */
+    public function emailExistsExceptId(string $email, int $excludeId): bool
+    {
+        // Je vérifie que la connexion existe
+        if ($this->db === null) {
+            return false;
+        }
+
+        try {
+            // Je prépare la requête de vérification
+            $sql = 'SELECT id FROM users WHERE email = :email AND id != :id LIMIT 1';
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':email' => $email,
+                ':id' => $excludeId
+            ]);
+
+            return $stmt->fetch() !== false;
+        } catch (PDOException $e) {
+            error_log('Erreur vérification email (except id) : ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Je vérifie si un nom d'utilisateur existe déjà en base pour un autre utilisateur
+     *
+     * @param string $username  Nom d'utilisateur à vérifier
+     * @param int    $excludeId ID de l'utilisateur à exclure
+     *
+     * @return bool
+     */
+    public function usernameExistsExceptId(string $username, int $excludeId): bool
+    {
+        // Je vérifie que la connexion existe
+        if ($this->db === null) {
+            return false;
+        }
+
+        try {
+            // Je prépare la requête de vérification
+            $sql = 'SELECT id FROM users WHERE username = :username AND id != :id LIMIT 1';
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':username' => $username,
+                ':id' => $excludeId
+            ]);
+
+            return $stmt->fetch() !== false;
+        } catch (PDOException $e) {
+            error_log('Erreur vérification username (except id) : ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Je mets à jour les informations personnelles d'un utilisateur
+     *
+     * @param int    $id       ID de l'utilisateur
+     * @param string $username Nouveau nom d'utilisateur
+     * @param string $email    Nouvel email
+     *
+     * @return bool
+     */
+    public function updateProfile(int $id, string $username, string $email): bool
+    {
+        // Je vérifie que la connexion existe
+        if ($this->db === null) {
+            return false;
+        }
+
+        try {
+            // Je prépare la requête de mise à jour
+            $sql = 'UPDATE users SET username = :username, email = :email WHERE id = :id';
+            $stmt = $this->db->prepare($sql);
+
+            return $stmt->execute([
+                ':username' => $username,
+                ':email' => $email,
+                ':id' => $id
+            ]);
+        } catch (PDOException $e) {
+            error_log('Erreur mise à jour profil : ' . $e->getMessage());
+            return false;
+        }
+    }
+
+
     /**
      * Je récupère tous les utilisateurs
      *

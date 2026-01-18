@@ -21,7 +21,7 @@ $authController = new AuthController();
 $page = $_GET['page'] ?? 'home';
 
 // Je définis les pages autorisées
-$allowedPages = ['home', 'login', 'register', 'profile', 'admin', 'logout'];
+$allowedPages = ['home', 'login', 'register', 'profile', 'edit_profile', 'admin', 'logout'];
 
 // Je vérifie si la page demandée existe
 if (!in_array($page, $allowedPages)) {
@@ -69,6 +69,23 @@ switch ($page) {
             exit;
         }
         break;
+    
+    case 'edit_profile':
+    // Je vérifie si l'utilisateur est connecté
+    if (!$authController->isLoggedIn()) {
+        header('Location: index.php?page=login');
+        exit;
+    }
+
+    // Je traite la mise à jour du profil
+    $result = $authController->updateProfile();
+    if ($result['success']) {
+        $success = $result['message'];
+    } else {
+        $error = $result['error'];
+    }
+    break;
+
 
     case 'admin':
     // Je vérifie si l'utilisateur est admin
@@ -94,6 +111,7 @@ $pageTitles = [
     'login' => 'Connexion',
     'register' => 'Inscription',
     'profile' => 'Mon Profil',
+    'edit_profile' => 'Modifier mon Profil',
     'admin' => 'Administration'
 ];
 $pageTitle = $pageTitles[$page] ?? 'Auth Module';
