@@ -1,12 +1,6 @@
 <!-- Vue Profil -->
 <?php
-// Je redirige si l'utilisateur n'est pas connecté
-if (!isset($_SESSION['user'])) {
-    header('Location: index.php?page=login');
-    exit;
-}
-
-// Je récupère les infos de l'utilisateur
+// Je récupère les infos de l'utilisateur connecté
 $user = $_SESSION['user'];
 ?>
 
@@ -48,7 +42,7 @@ $user = $_SESSION['user'];
                 <?php endif; ?>
                 
                 <!-- Bouton déconnexion -->
-                <a href="index.php?page=logout" class="btn btn-outline-dark w-100">Se déconnecter</a>
+                <a href="index.php?page=logout" class="btn btn-outline-dark w-100" id="logoutBtn">Se déconnecter</a>
             </div>
         </div>
     </div>
