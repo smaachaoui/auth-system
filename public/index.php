@@ -97,10 +97,10 @@ $pageTitles = [
 $pageTitle = $pageTitles[$page] ?? 'Auth Module';
 
 // J'inclus le header
-include '../assets/components/header.php';
+include '../assets/views/components/header.php';
 
 // J'inclus la vue demandée
 include '../assets/views/' . $page . '.php';
 
 // J'inclus le footer
-include '../assets/components/footer.php';
+include '../assets/views/components/footer.php';
