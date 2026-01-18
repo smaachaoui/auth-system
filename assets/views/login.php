@@ -4,7 +4,7 @@
         <h1 class="text-center mb-4">Connexion</h1>
         
         <!-- J'affiche le message d'erreur si présent -->
-        <?php if (isset($error)): ?>
+        <?php if (!empty($error)): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
         

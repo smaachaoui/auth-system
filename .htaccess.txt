@@ -1,5 +1,5 @@
-# J'empêche l'accès direct aux fichiers sensibles
-<FilesMatch "\.(php|sql|log|env)$">
+# Je protège uniquement les fichiers sensibles hors du dossier public
+<FilesMatch "\.(sql|log|env)$">
     Order Allow,Deny
     Deny from all
 </FilesMatch>

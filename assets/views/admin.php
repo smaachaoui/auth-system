@@ -1,12 +1,5 @@
 <!-- Vue Administration -->
-<?php
-// Je récupère les statistiques via le modèle User
-$userModel = new User();
-$totalUsers = $userModel->countAll();
-$totalAdmins = $userModel->countAdmins();
-$newUsers = $userModel->countNewUsers();
-$users = $userModel->findAll();
-?>
+
 
 <div class="row">
     <div class="col-12">

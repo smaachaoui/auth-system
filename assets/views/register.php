@@ -4,12 +4,12 @@
         <h1 class="text-center mb-4">Inscription</h1>
         
         <!-- J'affiche le message d'erreur si présent -->
-        <?php if (isset($error)): ?>
+        <?php if (!empty($error)): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
         
         <!-- J'affiche le message de succès si présent -->
-        <?php if (isset($success)): ?>
+        <?php if (!empty($success)): ?>
             <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
         <?php endif; ?>
         

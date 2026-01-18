@@ -62,7 +62,6 @@ switch ($page) {
         $authController->logout();
         header('Location: index.php');
         exit;
-        break;
 
     case 'profile':
         // Je vérifie si l'utilisateur est connecté
@@ -73,12 +72,18 @@ switch ($page) {
         break;
 
     case 'admin':
-        // Je vérifie si l'utilisateur est admin
-        if (!$authController->isAdmin()) {
-            header('Location: index.php?page=login');
-            exit;
-        }
-        break;
+    // Je vérifie si l'utilisateur est admin
+    if (!$authController->isAdmin()) {
+        header('Location: index.php?page=login');
+        exit;
+    }
+    // Je prépare les données pour la vue admin
+    $userModel = $authController->getUserModel();
+    $totalUsers = $userModel->countAll();
+    $totalAdmins = $userModel->countAdmins();
+    $newUsers = $userModel->countNewUsers();
+    $users = $userModel->findAll();
+    break;
 }
 
 // Je définis les titres des pages
