@@ -1,5 +1,5 @@
 # Je protège les fichiers de configuration sensibles
-assets/config/database.php
+config/database.php
 
 # J'ignore les fichiers d'environnement
 .env

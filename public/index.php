@@ -10,7 +10,7 @@
 session_start();
 
 // J'inclus les fichiers nécessaires
-require_once '../assets/config/database.php';
+require_once '../config/database.php';
 require_once '../assets/models/User.php';
 require_once '../assets/controllers/AuthController.php';
 
