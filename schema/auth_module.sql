@@ -31,21 +31,3 @@ CREATE TABLE users (
     INDEX idx_role (role),
     INDEX idx_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Je crée un utilisateur admin par défaut (mot de passe: Admin123!)
-INSERT INTO users (username, email, password, role, created_at) VALUES (
-    'admin',
-    'admin@authmodule.com',
-    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-    'admin',
-    NOW()
-);
-
--- Je crée un utilisateur test par défaut (mot de passe: User1234!)
-INSERT INTO users (username, email, password, role, created_at) VALUES (
-    'user_test',
-    'user@authmodule.com',
-    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-    'user',
-    NOW()
-);
