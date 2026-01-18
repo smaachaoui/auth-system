@@ -32,8 +32,7 @@ if (!in_array($page, $allowedPages)) {
 $error = null;
 $success = null;
 
-// Je génère un token CSRF pour les formulaires
-$csrfToken = $authController->generateCsrfToken();
+
 
 // Je gère les actions selon la page
 switch ($page) {
@@ -85,6 +84,9 @@ switch ($page) {
     $users = $userModel->findAll();
     break;
 }
+
+// Je génère un token CSRF pour les formulaires
+$csrfToken = $authController->generateCsrfToken();
 
 // Je définis les titres des pages
 $pageTitles = [
