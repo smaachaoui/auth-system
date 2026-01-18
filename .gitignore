@@ -1,0 +1,23 @@
+# Je protège les fichiers de configuration sensibles
+assets/config/database.php
+
+# J'ignore les fichiers d'environnement
+.env
+.env.local
+
+# J'ignore les fichiers système
+.DS_Store
+Thumbs.db
+
+# J'ignore les logs
+*.log
+logs/
+
+# J'ignore les fichiers IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# J'ignore les dépendances (si utilisation de Composer plus tard)
+/vendor/

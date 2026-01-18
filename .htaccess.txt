@@ -1,0 +1,16 @@
+# J'empêche l'accès direct aux fichiers sensibles
+<FilesMatch "\.(php|sql|log|env)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# J'autorise uniquement l'accès au dossier public
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Je redirige tout vers le dossier public
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ /public/$1 [L]
+</IfModule>
